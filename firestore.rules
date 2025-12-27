@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isTeacher() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow write: if request.auth.uid == userId; // Users can edit their own profile
+    }
+    
+    match /classes/{classId} {
+      allow read: if isSignedIn();
+      allow create, update: if isTeacher();
+      
+      match /whiteboard/{pathId} {
+        allow read, write: if isSignedIn(); // Allow all enrolled to draw
+      }
+    }
+    
+    match /enrollments/{enrollmentId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn(); // Simplified for self-enrollment
+    }
+    
+    match /videos/{videoId} {
+      allow read: if isSignedIn();
+      allow write: if isTeacher();
+    }
+    
+    match /exams/{examId} {
+      allow read: if isSignedIn();
+      allow write: if isTeacher();
+    }
+    
+    match /posts/{postId} {
+      allow read, write: if isSignedIn();
+    }
+    
+    match /sessions/{sessionId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn(); // Students need to update 'raisedHands'
+    }
+  }
+}

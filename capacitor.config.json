@@ -1,0 +1,14 @@
+{
+  "appId": "com.jexam.app",
+  "appName": "JEXAM",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#020617"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "JEXAM",
+  "description": "Advanced educational platform for teachers and students with live streaming, exams, and analytics.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
